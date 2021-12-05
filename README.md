@@ -5,8 +5,7 @@ No estudo original, os autores propuseram identificar e analisar focos da doenç
 
 Após a coleta e preparação dos dados, os autores correlacionaram as informações coletadas da rede social Twitter com os dados fornecidos por meios oficiais de notificação das doenças tropicais. Os resultados mostram uma forte relação entre os dados da rede social Twitter com os dados do Ministério da Saúde foram 81\% (estado) e  78\% (cidade).
 
-
-
+Objeto da reprodução (ou reanálise)
 
 O Objetivo é reanalisar os dados coletados pelos autores, fazendo uso de novas abordagens estatísticas, tal como intervalo de confiança, bootstrap e verificar a utilização das correlações, pois não foi informada qual correlação foi usada no trabalho (figura 2).
 
