@@ -1,0 +1,139 @@
+---
+title: "Binge drinking"
+output: html_notebook
+---
+
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(hrbrthemes)
+theme_set(theme_ipsum_rc())
+library("readxl")
+library(boot)
+library(broom)
+```
+classificacao_febre_amarela2
+
+read.xlsx("myfile.xlsx", sheetName = "Sheet1")
+
+```{r}
+#dados = read_csv(here::here("data/sat-gpa.csv"), col_types = "iidd")
+  #rename("Math" = math_SAT, "Verb" = verb_SAT, "Comp" = comp_GPA, "Geral" = univ_GPA)
+#dados1 = read_excel(here::here("data/classificacao_febre_amarela2.xlsx"))
+
+dados = read_excel(here::here("data/FA_cidade.xlsx"))
+
+
+glimpse(dados)
+```
+
+```{r}
+dados %>%
+  pivot_longer(c(Twitter), values_to = "GPA") %>%
+  ggplot(aes(x=GPA )) +
+  geom_histogram (fill = "coral", binwidth = 1, color = "black", alpha = .6) + 
+  labs(
+    title = "Gráfico 4 - Histogramas do desempenho dos alunos de Marh SAT e verb SAT", 
+    x = "Twitter",
+    y = "")+
+    facet_wrap(~name) 
+    theme(plot.title=element_text(hjust=0.5), text=element_text(size=12)) 
+
+
+```
+
+
+
+
+
+```{r}
+dados %>%
+  #pivot_longer(SVS) %>%
+  ggplot(aes(x=SVS )) +
+  geom_histogram(fill = "coral", binwidth = 1, color = "black", alpha = .6) + 
+  labs(
+    title = "Casos de febre amarela no Brasil ", 
+    x = "SVS",
+    y = "")+
+  theme(plot.title=element_text(hjust=0.5), text=element_text(size=12))
+  #labs(caption = "G 2: Histograma de GPA agrupados por Área de Conhecimento.")
+```
+
+
+```{r}
+dados %>% 
+  ggplot(aes(x = SVS, y = Twitter)) + 
+  geom_point(alpha = 0.5, size = 3, color = "Coral")+
+  #scale_x_log10()+
+  #scale_y_log10()+
+  #geom_abline()+
+  geom_smooth(method='lm', se = FALSE, color="coral")+
+    labs(
+        title = "Dispersão entre a correlação SVS e Twitter", 
+        x = "SVS", 
+        y = "Twitter")+
+    theme(plot.title = element_text(size = 12))
+```
+
+
+
+
+
+
+```{r}
+theta_math_SVS_Twitter  <- function(d, i) {
+    r = d %>% 
+        slice(i) %>% 
+        summarise(r = cor(SVS, Twitter, method = "pearson")) %>% pull(r)
+    r
+}
+ci_theta_math_SVS_Twitter = boot(data = dados,
+           statistic = theta_math_SVS_Twitter,
+           R = 4000) %>%
+    tidy(conf.level = .95,
+         conf.method = "bca",
+         conf.int = TRUE)
+ci_theta_math_SVS_Twitter$pearson = c("SVS e Twitter")
+#theta_math_SAT_comp_GPA$Correlacao = c("pearson","Kendall", "spearman")
+
+
+ci_theta_math_SVS_Twitter
+```
+
+
+```{r}
+ci_theta_math_SVS_Twitter %>% 
+  ggplot(aes(
+    x = "",
+    ymin = conf.low,
+    y = statistic,
+    ymax = conf.high))+
+  geom_linerange()+
+  geom_errorbar(width = .1) + 
+  geom_point(color = "coral", size = 4)+
+  scale_y_continuous()+
+  labs(x = "mecanismo", y = "")+
+  coord_flip()+
+    theme(plot.title=element_text(hjust=0.5), text=element_text(size=130)) +
+  labs(
+    x = "",
+    y = "Correlação de Pesrson"
+    #title = "Gráifo 7 - IC da correlação entre SVS (Secretaria de Vigilância em Saúde) e Twitter por cidade"
+        )
+#ggsave("IC1.pdf") 
+
+```
+
+tESTE DE HIPOTESE
+
+```{r}
+cor.test(dados$SVS, dados$Twitter) %>%
+  tidy()
+```
+
+===========================================================================================================
+
+
+
+
