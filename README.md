@@ -1,4 +1,5 @@
 # Coleta-e-analise-de-dados-Twitter-Febre-Amarela
+# Replicação de Alencar et. al 2019
 
 Estudo original
 No estudo original, os autores propuseram identificar e analisar focos da doença tropical febre amarela no Brasil, utilizando técnicas de mineração de texto e Redes Bayesianos. As técnicas de mineração de texto possibilitaram a coleta e preparação dos dados coletados da rede social Twitter no período entre 13 de março a 4 de julho de 2018. Para isso, foram verificadas as mensagens dos usuários que tivessem relacionadas com sintomas da doença ou ainda mensagens com alguma relação ao dado pesquisado. 
